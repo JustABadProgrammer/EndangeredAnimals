@@ -1,9 +1,30 @@
-body {
-    /*Set the width of the page to be a mac of 1080 pixels*/
-    max-width: 1080px;
-    margin-left: auto;
-    margin-right: auto;
-    /*Set the background colour to be grey */
-    background-color: rgb(235, 235, 235);
+.eventDiv{
+    display: block;
+    width: 30%;
+    height: 410px;
+    border: 1px solid black;
+    padding-left: 2%;
+    margin: 5%;
+    position: relative;
 }
-  
+
+.FirstHidden{
+    display:none;
+}
+
+.loggedIn{
+    display: none;
+}
+
+.posterImg{
+    width: 95%;
+    max-height: 200px;
+}
+
+h1{
+    font-size: 20pt;
+}
+
+h2{
+    font-size: medium;
+}

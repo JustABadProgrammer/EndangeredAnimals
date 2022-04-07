@@ -1,9 +1,9 @@
 const MongoClient = require('mongodb').MongoClient;
 //const url = "mongodb://localhost:27017/";
-const url = "mongodb+srv://JustABadProgrammer:HelloBees12@cluster0.dsxnt.mongodb.net/test";
 const express = require('express');
 const bodyParser = require('body-parser')
 const app = express();
+require('dotenv').config()
 const session = require('express-session');
 app.use(express.static('assets'))
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -12,7 +12,7 @@ var db;
 //module.exports = app;
 
 
-MongoClient.connect(url, function (err, client) {
+MongoClient.connect(process.env.url, function (err, client) {
   if (err) throw err;
   db = client.db('UglyAnimals');
   app.listen(8080);
@@ -40,6 +40,20 @@ app.get("/getAnimalStats", function (req, res) {
     if (err) throw err;
     res.send(JSON.stringify(result));
   });
+});
+
+//Get all the stats from the AnimalStats and send to client
+app.get("/getEvents", function (req, res) {
+  db.collection('EventInfo').find(req.body).toArray(function (err, result) {
+    if (err) throw err;
+    res.send(JSON.stringify(result));
+    
+  });
+});
+
+//Redirect to correct events page
+app.post('/getLoginInfo', function (req, res) {
+  res.send(getLoginInfo());
 });
 
 //Format Login Info

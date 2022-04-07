@@ -1,5 +1,15 @@
 /* The popup form - hidden by default */
 /*Adapted from W3 Schools https://www.w3schools.com/howto/howto_js_popup_form.asp*/
+body {
+    /*Set the width of the page to be a mac of 1080 pixels*/
+    max-width: 1080px;
+    margin-left: auto;
+    margin-right: auto;
+    /*Set the background colour to be grey */
+    background-color: rgb(235, 235, 235);
+}
+
+
 #backDiv{
     position: fixed;
     top: 50%;
@@ -7,12 +17,14 @@
     transform: translate(-50%, -50%);
     border: 3px solid #f1f1f1;
     display: none;
+    background-color: white;
+    z-index: 99;
 }
 
 /* Add styles to the form container */
 #form-popup {
   display: block;
-  z-index: 9;
+  z-index: 99;
   max-width: 300px;
   padding: 10px;
   background-color: white;
@@ -42,12 +54,15 @@
   cursor: pointer;
   width: 100%;
   margin-bottom:10px;
-  opacity: 0.8;
 }
 
 /* Add a red background color to the cancel button */
 #loginCloseButton {
   background-color: red;
+}
+
+#InvalidPassword{
+    color: red;
 }
 
 /* Add some hover effects to buttons 
