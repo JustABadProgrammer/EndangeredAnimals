@@ -20,7 +20,7 @@ MongoClient.connect(url, function (err, client) {
 });
 
 app.get('/', function (req, res) {
-  res.render('pages/login');
+  res.render('pages/index.ejs');
 });
 
 app.get("/getAnimalStats", function(req, res){
@@ -28,6 +28,19 @@ app.get("/getAnimalStats", function(req, res){
       if (err) throw err;
       res.send(JSON.stringify(result));
     });
+  });
+
+  app.get("/getLoginInfo", function(req, res){
+      sessionInfo = {
+          Username : session.username,
+          Admin : session.admin
+      }
+    res.send(JSON.stringify(sessionInfo))
+    //res.send({Username:session., admin:false});
+  })
+
+  app.get('/loginPage', function(req,res){
+    res.render('pages/login.ejs')
   });
 
   app.post('/auth', function(request, response) {
@@ -44,24 +57,26 @@ app.get("/getAnimalStats", function(req, res){
             ///});
             console.log(username + "-"+password)
             db.collection('login').find({ "Username" : username}).toArray(function(err,result){
-
-                console.log(result)
-
             //db.collection.find({ "serialnumber" : { $exists : true, $ne : null } })
 			// If there is an issue with the query, output the error
 			if (err) throw err;
 			// If the account exists
-            console.log(result["Password"] + " - " + password)
-			if (result[0]["Password"]==password) {
+            
+            if(result.length == 1){
+            if (result[0]["Password"]==password) {
 				// Authenticate the user
 				session.loggedin = true;
 				session.username = username;
+                session.admin = result[0]["Admin"]
 				// Redirect to home page
-				//response.redirect('/home');
-                console.log("LoggedIn")
+				response.redirect('/');
+                //console.log("LoggedIn")
 			} else {
 				response.send('Incorrect Username and/or Password!');
-			}			
+			}	
+            }else{
+                response.send('Incorrect Username and/or Password!');
+            }		
 			response.end();
 		});
 	} else {
