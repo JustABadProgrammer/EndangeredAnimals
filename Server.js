@@ -19,68 +19,74 @@ MongoClient.connect(url, function (err, client) {
   console.log("Running on 8080")
 });
 
+//Redirect to correct index page
 app.get('/', function (req, res) {
   res.render('pages/index.ejs');
 });
 
-app.get("/getAnimalStats", function(req, res){
-    db.collection('AnimalStats').find(req.body).toArray(function(err, result){
+//Redirect to correct game page
+app.get('/game', function (req, res) {
+  res.render('pages/game.ejs');
+});
+
+//Redirect to correct events page
+app.get('/events', function (req, res) {
+  res.render('pages/events.ejs');
+});
+
+//Get all the stats from the AnimalStats and send to client
+app.get("/getAnimalStats", function (req, res) {
+  db.collection('AnimalStats').find(req.body).toArray(function (err, result) {
+    if (err) throw err;
+    res.send(JSON.stringify(result));
+  });
+});
+
+//Format Login Info
+function getLoginInfo() {
+  sessionInfo = {
+    Username: session.username,
+    Admin: session.admin
+  }
+  return JSON.stringify(sessionInfo);
+}
+
+//This is the method that checks whether the users information is correct
+app.post('/loginAuth', function (request, response) {
+  // Capture the input fields
+  let username = request.body.Username
+  let password = request.body.Password
+  // Ensure the input fields exists and are not empty
+  console.log(username + "-"+password)
+  if (username && password) {
+    console.log(username + "-" + password)
+    //Query the database for a person with the same username
+    db.collection('login').find({ "Username": username }).toArray(function (err, result) {
+      //db.collection.find({ "serialnumber" : { $exists : true, $ne : null } })
+      // If there is an issue with the query, output the error
       if (err) throw err;
-      res.send(JSON.stringify(result));
-    });
-  });
-
-  app.get("/getLoginInfo", function(req, res){
-      sessionInfo = {
-          Username : session.username,
-          Admin : session.admin
+      //Check if if the account exists
+      if (result.length == 1) {
+        //Check if its the correct password
+        console.log(result)
+        if (result[0]["Password"] == password) {
+          // Authenticate the user
+          session.loggedin = true;
+          session.username = username;
+          session.admin = result[0]["Admin"]
+          // Redirect to home page
+          response.send(getLoginInfo());
+          //console.log("LoggedIn")
+        } else {
+          response.send('');
+        }
+      } else {
+        response.send('');
       }
-    res.send(JSON.stringify(sessionInfo))
-    //res.send({Username:session., admin:false});
-  })
-
-  app.get('/loginPage', function(req,res){
-    res.render('pages/login.ejs')
-  });
-
-  app.post('/auth', function(request, response) {
-	// Capture the input fields
-	let username = request.body.username;
-	let password = request.body.password;
-	// Ensure the input fields exists and are not empty
-	if (username && password) {
-		// Execute SQL query that'll select the account from the database based on the specified username and password
-        //db.collection('AnimalStats').find(req.body).toArray(function(err, result){
-
-           // db.collection('login').find().toArray(function(err, result){
-             //   console.log(result)
-            ///});
-            console.log(username + "-"+password)
-            db.collection('login').find({ "Username" : username}).toArray(function(err,result){
-            //db.collection.find({ "serialnumber" : { $exists : true, $ne : null } })
-			// If there is an issue with the query, output the error
-			if (err) throw err;
-			// If the account exists
-            
-            if(result.length == 1){
-            if (result[0]["Password"]==password) {
-				// Authenticate the user
-				session.loggedin = true;
-				session.username = username;
-                session.admin = result[0]["Admin"]
-				// Redirect to home page
-				response.redirect('/');
-                //console.log("LoggedIn")
-			} else {
-				response.send('Incorrect Username and/or Password!');
-			}	
-            }else{
-                response.send('Incorrect Username and/or Password!');
-            }		
-			response.end();
-		});
-	} else {
-		response.send('Please enter Username and Password!');
-		response.end();
-	}
+      response.end();
+    });
+  } else {
+    response.send('');
+    response.end();
+  }
 });

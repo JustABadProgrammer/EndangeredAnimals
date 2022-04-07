@@ -1,13 +1,4 @@
-body {
-    /*Set the width of the page to be a mac of 1080 pixels*/
-    max-width: 1080px;
-    margin-left: auto;
-    margin-right: auto;
-    /*Set the background colour to be grey */
-    background-color: rgb(235, 235, 235);
-  }
-  
-
+/*Code adapted from https://codeshack.io/basic-login-system-nodejs-express-mysql/*/
 /*Edit the div naved navbar */
 .navbar {
     /*Set the navbar to be sticky when it is 0 pixels from the top of the Page

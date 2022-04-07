@@ -1,22 +1,34 @@
 <meta charset="UTF-8">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link rel="stylesheet" href="stylesheets\navbar.css">
+<div id="blurTag"></div>
+
 <div id="navbar" class="navbar">
     <ul id="nav">
-        <liNav><a <%if(active=="Home"){%>class="active"<%}%> href="/Index">Home</a></li>
-        <liNav><a <%if(active=="About"){%>class="active"<%}%> href="/About">About</a></li>
+        <liNav><a <%if(active=="Home"){%>class="active"<%}%> href="/">Home</a></li>
+        <liNav><a <%if(active=="Game"){%>class="active"<%}%> href="/Game">Game</a></li>
+        <liNav><a <%if(active=="Events"){%>class="active"<%}%> href="/Events">Events</a></li>
         
-        <div id="right"><liNav><a <%if(active=="Login"){%>class="active"<%}%> href="loginPage" id="loginButton">Login</a></li></div>
+        <div id="right">
+          <!--<liNav><a <%if(active=="Login"){%>class="active"<%}%> href="loginPage" id="loginButton">Login</a></li>-->
+            <liNav><button id="loginButton" type="button">Login</button></liNav>
+        </div>
     </ul>
 </div>
-<!--
-<div id="navbar" class="navbar">
-    <ul id="nav">
-      <liNav><a href="index.html">Home</a></liNav>
-      <liNav>
-        <cur href="CV.html">CV</cur>
-      </liNav>
-      <liNav><a href="Project.html">Projects</a></liNav>
-      <liNav><a href="loginPage">Contact Me</a></liNav>
-    </ul>
-  </div>--->
+
+
+<div id="backDiv">
+  <div class="form-popup" id="myForm">
+    <h1>Login</h1>
+
+    <label for="email"><b>Email</b></label>
+    <input id="emailInp" type="text" placeholder="Enter Email" name="email" required>
+
+    <label for="psw"><b>Password</b></label>
+    <input id="passwordInp" type="password" placeholder="Enter Password" name="psw" required>
+
+    <button type="submit" id="loginSubmitButton" class="btn">Login</button>
+    <button type="button" id="loginCloseButton" class="btn">Close</button>
+
+  </div>
+</div>  
