@@ -13,10 +13,6 @@
     overflow: auto;
 }
 
-.FirstHidden {
-    display: none;
-}
-
 .loggedIn {
     display: none;
 }

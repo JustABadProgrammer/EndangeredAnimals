@@ -1,17 +1,28 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <title>Info Page</title>
-        <%- include('../partials/head', {active: ""}) %>
-        <script src="scripts\account.js"></script>
-        <link rel="stylesheet" href="stylesheets\game.css">
-    </head>
-    <body>
 
-        <div id="pageContent">
-            
+<head>
+    <title>Info Page</title>
+    <%- include('../partials/head', {active: "login" }) %>
+        <script src="scripts\account.js"></script>
+        <link rel="stylesheet" href="stylesheets\account.css">
+</head>
+
+<body>
+
+    <div id="pageContent">
+        <div id="Username">
         </div>
-        
-    </body>
+        </br>
+        <div id="interestedEventsWrapper">
+            <h1>You showed interest in these events:</h1>
+            <div id="interestedEvents"></div>
+        </div>
+        <div id="editPage">
+            <editButton><a href="/account/edit">Edit</a></editButton>
+        </div>
+    </div>
+</body>
+
 </html>

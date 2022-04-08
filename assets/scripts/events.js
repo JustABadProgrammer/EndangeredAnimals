@@ -57,8 +57,12 @@ function eventButton(eventName){
     console.log(eventID[eventName])
     //If the action is to remove then the given event is removed from the array
     //Otherwise it is added
+    num = 1;
+    console.log(userInfo["EventsInterested"])
     if($('#'+eventID[eventName]+'_btn').text().includes("Remove")){
         userInfo["EventsInterested"].splice(userInfo["EventsInterested"].indexOf(eventID[eventName]),1);
+       
+        num = -1;
     }else{
         userInfo["EventsInterested"].push(eventID[eventName]);
     }
@@ -76,6 +80,7 @@ function eventButton(eventName){
         data : dataSend,
         //Update the button so it is the opposite
         success: function (response, textStatus, jqXHR) {
+
             console.log(response)
 
             btn = document.getElementById(eventID[eventName]+'_btn');
@@ -83,12 +88,20 @@ function eventButton(eventName){
             if($('#'+eventID[eventName]+'_btn').text().includes("Remove")){
                 btn.style.backgroundColor = "#adaab2";
                 btn.style.color = "black";
-                btn.innerHTML = "Add to interested list";
+                btn.innerHTML = "Add to isnterested list";
             }else{
                 btn.style.backgroundColor = "#4d4a52";
                 btn.style.color = "white";
                 btn.innerHTML = "Remove from interested list";
             }
+        
+            dataSend = {EventID : eventID[eventName], number : num}
+            $.ajax({
+                url: "/incrementEvent", // Url of backend (can be python, php, etc..)
+                type: "POST", // data type (can be get, post, put, delete)
+                data : dataSend
+                //Update the button so it is the opposite
+            });
         }
     });
 }

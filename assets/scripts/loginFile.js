@@ -3,6 +3,7 @@ userInfo = null;
 $(document).ready(function () {
     popupShowing = true;
 
+    
     //Check to see if the user is logged in when the page loads
     $.ajax({
         url: "/getLoginInfo", // Url of backend (can be python, php, etc..)
@@ -14,7 +15,8 @@ $(document).ready(function () {
             if (JSON.parse(response)["Username"] != null) {
                 userInfo = JSON.parse(response)
                 console.log(userInfo["Username"])
-                updatePage(getPage());
+                //location.reload();
+              //  updatePage(getPage());
                 
             } else {
                 userInfo = null;
@@ -23,6 +25,9 @@ $(document).ready(function () {
         }
     });
 
+    if(userInfo!=null){
+        $("#loginButton").html(userInfo["Username"])
+    }
     //Submit button for the log in system
     //From 
     $("#loginSubmitButton").click(function () {
@@ -69,7 +74,6 @@ $(document).ready(function () {
         if (confirm(text)) {
             console.log("SigningOut")
             userInfo=null;
-            updateSignOut();
             //Send to the server to remove information about the user
             $.ajax({
                 url: "/signOut", // Url of backend (can be python, php, etc..)
@@ -93,7 +97,9 @@ $(document).ready(function () {
             return 1
         } else if ($(location).attr("href").includes("Events")) {
             return 2
-        } else {
+        } else if($(location).attr("href").includes("account")){
+            return 3
+        }else{
             return 0
         }
     }
@@ -116,22 +122,18 @@ $(document).ready(function () {
                 $('#' + e + '_btn').css('backgroundColor', '#4d4a52')
                 $('#' + e + '_btn').css('color', 'white')
             })
+        }else if (pageID==3){
+            alert("Reloading")
+            location.reload();
         }
     }
 
-    function updateSignOut(pageID){
-        $("#loginButton").html("Login")
-
-        if (pageID == 2) {
-            $('.loggedIn').css('display', 'none');
-            $('.eventDiv').css('height', '550px');
-        }
-    }
 
     //Page id is as follows
     //Home - 0
     //Game - 1
     //Events - 2    
+    //Account - 3
     function loginAttempt(pageID) {
 
         console.log(pageID)
@@ -150,17 +152,7 @@ $(document).ready(function () {
                 console.log(response)
                 //If there is a response then store the information and close the popup
                 if (response != "") {
-                    if (JSON.parse(response)["Username"] != null) {
-                        userInfo = JSON.parse(response)
-                        console.log(userInfo["Username"])
-                        document.getElementById("myForm").style.display = "none";
-                        $('#blurTag').html('');
-                        document.getElementById("backDiv").style.display = "none";
-                        $('#InvalidPassword').html("");
-                    }
-
-                    //If it is on the event page update that page
-                    updatePage(getPage());
+                    location.reload();
                 } else {
                     $('#InvalidPassword').html("Incorrect Username/Password");
                 }
