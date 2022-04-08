@@ -110,6 +110,24 @@ app.post("/updateUserName", function (req, res) {
 
 });
 
+app.post("/userSignUp", function(req, res){
+
+  exists = false;
+  db.collection('login').find({ "Username": session.username }).toArray(function (err, result) {
+    exists = (result.length > 0)
+  });
+
+  console.log(exists)
+  if(exists==false){
+    db.collection('login').insertOne(req.body, function(err, result) {
+      if (err) throw err;
+      res.send(":)")
+    });
+  }else{
+    res.send(":(")
+  }
+})
+
 app.post("/updateUserPassword", function (req, res) {
 
   let username = req.body.Username

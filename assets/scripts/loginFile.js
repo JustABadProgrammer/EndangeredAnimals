@@ -86,6 +86,19 @@ $(document).ready(function () {
         }
     })
 
+    $('#newAccount').click(function(){
+        $('#loginCloseButton').hide();
+        $('#loginSubmitButton').hide();
+        $('#title').text("Sign Up")
+        $('#newAccount').hide();
+        $('#signUp').show();
+    })
+
+    $('#signUp').click(function(){
+        
+    })
+
+
     function closeLoginPopup() {
         $('#blurTag').html('');
         $('#backDiv').css('display', 'none');
@@ -104,42 +117,12 @@ $(document).ready(function () {
         }
     }
 
-    //This updates the page for when a user is logged on
-    //Due to different content in each page the index is checked
-    //Then the corrisponding action is taken
-    function updatePage(pageID){
-        $("#loginButton").html(userInfo["Username"])
-        
-
-        if (pageID == 2) {
-            console.log("Events Page")
-            $('.loggedIn').css('display', 'block');
-            $('.eventDiv').css('height', '550px');
-
-            console.log(userInfo["EventsInterested"])
-            userInfo["EventsInterested"].forEach(function (e) {
-                $('#' + e + '_btn').text("Remove from interested list")
-                $('#' + e + '_btn').css('backgroundColor', '#4d4a52')
-                $('#' + e + '_btn').css('color', 'white')
-            })
-        }else if (pageID==3){
-            alert("Reloading")
-            location.reload();
-        }
-    }
-
-
-    //Page id is as follows
-    //Home - 0
-    //Game - 1
-    //Events - 2    
-    //Account - 3
     function loginAttempt(pageID) {
 
         console.log(pageID)
 
         dataIn = {
-            "Username": $("#emailInp").val(),
+            "Username": $("#usernameInp").val(),
             "Password": $("#passwordInp").val()
         }
 

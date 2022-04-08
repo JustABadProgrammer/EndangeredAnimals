@@ -6,7 +6,8 @@
     <title>Info Page</title>
     <link rel="stylesheet" href="stylesheets\editAccount.css">
     <%- include('../partials/head', {active: "Account" }) %>
-        <script src="scripts\editAccount.js"></script>
+        <%- include('../partials/login') %>
+            <script src="scripts\editAccount.js"></script>
 </head>
 
 <body>
@@ -21,7 +22,8 @@
 
             <div id="usernameChangeDiv">
                 <label for="updateUsername"><b>Username:</label>
-                <input class="txt" type="text" id="usernameTxt" placeholder="Enter Username" name="usernameTxt" disabled value=<%=name %>></br>
+                <input class="txt" type="text" id="usernameTxt" placeholder="Enter Username" name="usernameTxt" disabled
+                    value=<%=name %>></br>
                 <button class="txt" id="editUsername">Change Username</button>
                 <button class="cancel" id="usernameCancel">Cancel</button>
 

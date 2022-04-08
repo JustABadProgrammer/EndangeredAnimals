@@ -17,7 +17,6 @@ body {
     left: 50%;
     transform: translate(-50%, -50%);
     border: 3px solid black;
-    display: none;
     background-color: white;
     z-index: 99;
     padding: 30px;
@@ -33,18 +32,20 @@ body {
 }
 
 /* Full-width input fields */
-#passwordInp, #emailInp{
+#passwordInp, #usernameInp{
   width: 94%;
   padding: 15px;
   margin: 5px 0 22px 0;
   border: none;
   background: #f1f1f1;
+  border: 1px solid black;
 }
 
 /* When the inputs get focus, do something */
-#passwordInp:focus, #emailInp:focus {
+#passwordInp:focus, #usernameInp:focus {
   background-color: #ddd;
   outline: none;
+  border: 2px solid black;
 }
 
 /* Set a style for the submit/login button */
@@ -63,10 +64,33 @@ body {
   background-color: red;
 }
 
+#newAccount{
+  background-color: lightblue;
+}
+
+#signUp{
+  background-color: #04AA6D;
+}
+
 #InvalidPassword{
     color: red;
 }
 
+#loginSubmitButton:hover{
+  background-color: rgb(3,148,94);
+}
+
+#loginCloseButton:hover{
+  background-color: rgb(196,0,0);
+}
+
+#newAccount:hover{
+  background-color: rgb(108,185,210);
+}
+
+#signUp:hover{
+  background-color: rgb(3,148,94);
+}
 /* Add some hover effects to buttons 
 .form-container .btn:hover, .open-button:hover {
   opacity: 1;
