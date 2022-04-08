@@ -2,6 +2,8 @@
     width: 100%;
 }
 
+
+
 #eventInfoContainer{
     width: 100%;
 }
@@ -64,10 +66,37 @@
     background-color: #98949f;
 }
 
+#editPage{
+    width: 100%;
+}
+
+
 editButton a{
-    width: 95%;
+    color: white;
+    background-color: #afb3b3;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 40px;  
+    text-decoration: none;
+    display: inline-block;
+    width: 100%;
+    height: 40px;
+    border: 1px solid black;
+    margin: 0 auto;
+   /* padding: 14px 16px;
+    min-width: 200px;*/
+    font-size: 20pt;
+  }
+
+  editButton a:hover{
+      background-color: #98949f;
+  }
+
+  /*
+editButton a{
+    width: 300%;
     padding: 5px;
     background-color: #adaab2;
     color: black;
     border: 2px solid black;
-}
+}*/

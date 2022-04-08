@@ -66,8 +66,7 @@ function eventButton(eventName){
     }else{
         userInfo["EventsInterested"].push(eventID[eventName]);
     }
-    console.log(userInfo["EventsInterested"])
-
+    
     dataSend = {
         Username : userInfo["Username"],
         EventsInterested : userInfo["EventsInterested"]

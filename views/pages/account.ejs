@@ -4,7 +4,7 @@
 
 <head>
     <title>Info Page</title>
-    <%- include('../partials/head', {active: "login" }) %>
+    <%- include('../partials/head', {active: "Account" }) %>
         <script src="scripts\account.js"></script>
         <link rel="stylesheet" href="stylesheets\account.css">
 </head>
@@ -19,8 +19,9 @@
             <h1>You showed interest in these events:</h1>
             <div id="interestedEvents"></div>
         </div>
-        <div id="editPage">
-            <editButton><a href="/account/edit">Edit</a></editButton>
+        <div id="editPage"></div>
+            </br>
+            <editButton><a href="/editAccount">Edit Account</a></editButton>
         </div>
     </div>
 </body>

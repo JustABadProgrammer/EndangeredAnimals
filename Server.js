@@ -24,6 +24,10 @@ app.get('/', function (req, res) {
   res.render('pages/index.ejs');
 });
 
+app.post('/', function (req, res) {
+  res.render('pages/index.ejs');
+});
+
 //Redirect to correct game page
 app.get('/game', function (req, res) {
   res.render('pages/game.ejs');
@@ -35,21 +39,21 @@ app.get('/events', function (req, res) {
 });
 
 app.get('/account', function (req, res) {
-  res.render('pages/account.ejs', { name: session.Username });
+  res.render('pages/account.ejs');
 });
 
-app.get('/account/edit', function (req, res) {
-  res.render('pages/editAccount.ejs', { name: session.Username });
+app.get('/editAccount', function (req, res) {
+  datasend = {
+    name : session.username
+  }
+  console.log(datasend )
+  res.render('pages/editAccount.ejs',datasend);
 });
 
 
 
 app.post('/signOut', function (req, res) {
-  session.loggedin = false;
-  session.username = null;
-  session.admin = null
-  session.eventsInterested = null
-  res.send("Done :)")
+  res.send(signOut());
 })
 
 //Get all the stats from the AnimalStats and send to client
@@ -72,12 +76,9 @@ app.get("/getEvents", function (req, res) {
 app.post("/incrementEvent", function (req, res) {
 
   var query = { EventID: req.body.EventID };
-
-  session.eventsInterested = req.body.EventsInterested;
   console.log(query)
   console.log(parseInt(req.body.number))
   db.collection('EventInfo').updateOne(query, { $inc: { TotalInterested: parseInt(req.body.number) } }, function (err, result) {
-    //db.collection('CurrentVenueInformation').insertOne(req.body, function(err, result) {
     if (err) throw err;
     res.send("Success");
   });
@@ -94,12 +95,56 @@ app.post("/updateInterestedEvents", function (req, res) {
 
   session.eventsInterested = req.body.EventsInterested;
   db.collection('login').updateOne(query, newvalues, function (err, result) {
-    //db.collection('CurrentVenueInformation').insertOne(req.body, function(err, result) {
     if (err) throw err;
     res.send("Success");
   });
 
 });
+
+app.post("/updateUserName", function (req, res) {
+  session.username = req.body.NewUsername;
+  db.collection('login').updateOne({ Username: req.body.Username }, {$set: {Username: req.body.NewUsername} }, function (err, result) {
+    if (err) throw err;
+    res.send(":)");
+  });
+
+});
+
+app.post("/updateUserPassword", function (req, res) {
+
+  let username = req.body.Username
+  let password = req.body.Password
+  let newPassword = req.body.NewPassword
+
+  db.collection('login').find({ "Username": session.username }).toArray(function (err, result) {
+
+    if (result[0]["Password"] == password) {
+
+      db.collection('login').updateOne({ Username: username }, {$set: {Password: newPassword} }, function (err, result) {
+        if (err) throw err;
+        res.send("Success");
+      });
+
+    }else{
+      res.send("Incorrect Password");
+    }
+
+
+  });
+
+
+});
+
+app.post("/deleteUser", function (req, res){
+
+  var user = { Username: req.body.Username, Password : req.body.Password };
+  console.log(user)
+  db.collection("login").deleteOne(user, function(err, obj) {
+    if (err) throw err;
+    console.log("Bye")
+    res.send(signOut())
+  });
+})
 
 //Redirect to correct events page
 app.post('/getLoginInfo', function (req, res) {
@@ -113,6 +158,7 @@ function getLoginInfo() {
     Admin: session.admin,
     EventsInterested: session.eventsInterested
   }
+  console.log(sessionInfo)
   return JSON.stringify(sessionInfo);
 }
 
@@ -140,6 +186,8 @@ app.post('/loginAuth', function (request, response) {
           session.username = username;
           session.admin = result[0]["Admin"]
           session.eventsInterested = result[0]["EventsInterested"]
+
+          console.log("Signed In")
           // Redirect to home page
           response.send(":)");
           //console.log("LoggedIn")
@@ -156,3 +204,12 @@ app.post('/loginAuth', function (request, response) {
     response.end();
   }
 });
+
+function signOut(){
+  session.loggedin = false;
+  session.username = null;
+  session.admin = null
+  session.eventsInterested = null
+  console.log("Signed Out")
+  return "Done :)"
+}

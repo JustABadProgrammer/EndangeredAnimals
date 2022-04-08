@@ -28,6 +28,13 @@
     float: center;
   }
   
+  #loginButton{
+    background-color: black;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+  }
+
   /*This the declaration of the links in the navigation bar*/
   liNav a, #loginButton {
     color: white;
@@ -77,10 +84,7 @@
     cursor: pointer;
   }
 
-  #loginButton{
-    background-color: black;
-    border: none;
-  }
+  
 
   #right{
       float: right;

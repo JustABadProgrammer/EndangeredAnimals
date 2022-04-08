@@ -1,17 +1,52 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <title>Info Page</title>
-        <link rel="stylesheet" href="stylesheets\events.css">
-        <%- include('../partials/head', {active: "Events"}) %>
-        <script src="scripts\events.js"></script>
-    </head>
-    <body>
 
-        <div id="EventContent">
-            <h1>Edit me :)</h1>
+<head>
+    <title>Info Page</title>
+    <link rel="stylesheet" href="stylesheets\editAccount.css">
+    <%- include('../partials/head', {active: "Account" }) %>
+        <script src="scripts\editAccount.js"></script>
+</head>
+
+<body>
+
+    <div id="pageContent">
+
+        <div id="Username">
+            <h1>Hello <%= name %>
+            </h1>
         </div>
-        
-    </body>
+        <div id="idSettings">
+
+            <div id="usernameChangeDiv">
+                <label for="updateUsername"><b>Username:</label>
+                <input class="txt" type="text" id="usernameTxt" placeholder="Enter Username" name="usernameTxt" disabled value=<%=name %>></br>
+                <button class="txt" id="editUsername">Change Username</button>
+                <button class="cancel" id="usernameCancel">Cancel</button>
+
+            </div></br></br>
+            <div id="passwordChangeDiv">
+                <label for="curPass"><b>Current Password:</label>
+                <input class="txt" type="password" id="currPass" name="curPass" placeholder="*****" disabled></br>
+
+                <label for="CurrentPassword"><b>New Password:</label>
+                <input class="txt" type="password" id="newPass" name="newPass" placeholder="" disabled></br>
+
+                <label for="CurrentPassword"><b>Confirm New Password:</label>
+                <input class="txt" type="password" id="confNewPass" name="newPass" placeholder="" disabled></br>
+                <h2 class="txt" id="incLabel"></h2>
+                <button class="txt" id="editPassword">Edit Password</button>
+                <button class="cancel" id="passwordCancel">Cancel</button>
+            </div></br></br>
+            <div id="deleteAccountDiv">
+                <button id="deleteAccount">Delete Account</button>
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
 </html>

@@ -14,7 +14,7 @@ $(document).ready(function () {
             //If they are logged in then save their information
             if (JSON.parse(response)["Username"] != null) {
                 userInfo = JSON.parse(response)
-                console.log(userInfo["Username"])
+                console.log(userInfo["EventsInterested"])
                 //location.reload();
               //  updatePage(getPage());
                 
