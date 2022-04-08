@@ -1,5 +1,6 @@
 /* The popup form - hidden by default */
 /*Adapted from W3 Schools https://www.w3schools.com/howto/howto_js_popup_form.asp*/
+/*Code adapted from https://codeshack.io/basic-login-system-nodejs-express-mysql/*/
 body {
     /*Set the width of the page to be a mac of 1080 pixels*/
     max-width: 1080px;
@@ -15,10 +16,11 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    border: 3px solid #f1f1f1;
+    border: 3px solid black;
     display: none;
     background-color: white;
     z-index: 99;
+    padding: 30px;
 }
 
 /* Add styles to the form container */
@@ -26,7 +28,7 @@ body {
   display: block;
   z-index: 99;
   max-width: 300px;
-  padding: 10px;
+  padding: 100px;
   background-color: white;
 }
 

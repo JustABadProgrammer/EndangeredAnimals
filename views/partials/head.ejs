@@ -5,20 +5,31 @@
 <link rel="stylesheet" href="stylesheets\login.css">
 <div id="blurTag"></div>
 
-<div id="navbar" class="navbar">
+<!--This is the navbar-->
+<div id="navBarWrapper">
+  <div id="navbar" class="navbar">
     <ul id="nav">
-        <liNav><a <%if(active=="Home"){%>class="active"<%}%> href="/">Home</a></li>
-        <liNav><a <%if(active=="Game"){%>class="active"<%}%> href="/Game">Game</a></li>
-        <liNav><a <%if(active=="Events"){%>class="active"<%}%> href="/Events">Events</a></li>
-        
-        <div id="right">
-          <!--<liNav><a <%if(active=="Login"){%>class="active"<%}%> href="loginPage" id="loginButton">Login</a></li>-->
-            <liNav><button id="loginButton" type="button">Login</button></liNav>
-        </div>
+      <liNav><a <%if(active=="Home" ){%>class="active"<%}%> href="/">Home</a></li>
+        <liNav><a <%if(active=="Game" ){%>class="active"<%}%> href="/Game">Game</a></li>
+          <liNav><a <%if(active=="Events" ){%>class="active"<%}%> href="/Events">Events</a></li>
+
+            <div id="right">
+              <!--<liNav><a <%if(active=="Login"){%>class="active"<%}%> href="loginPage" id="loginButton">Login</a></li>-->
+              <liNav><button id="loginButton" type="button">Login</button></liNav>
+
+            </div>
     </ul>
+
+  </div>
+  <!--This is the dropdown that allows users to navigate to the accounts tab and sign out-->
+  <div id="loggedInDropdown">
+    <accLnk><a href="/account">Account</a></accLnk>
+    <accLnk><button id="signOut" type="button">Sign Out</button></accLnk>
+  </div>
 </div>
 
 <!--Code adapted from W3 Schools-->
+<!--This is the log in form-->
 <div id="backDiv">
   <div class="form-popup" id="myForm">
     <h1>Login</h1>
@@ -31,10 +42,10 @@
     <label for="psw"><b>Password</b></label>
     <input id="passwordInp" type="password" placeholder="Enter Password" name="psw" required>
 
-    
+
 
     <button type="submit" id="loginSubmitButton" class="btn">Login</button>
     <button type="button" id="loginCloseButton" class="btn">Close</button>
 
   </div>
-</div>  
+</div>

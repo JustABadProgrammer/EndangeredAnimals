@@ -1,6 +1,5 @@
-/*Code adapted from https://codeshack.io/basic-login-system-nodejs-express-mysql/*/
-/*Edit the div naved navbar */
-.navbar {
+/*Edit the div named navbar */
+.navbar, #navBarWrapper{
     /*Set the navbar to be sticky when it is 0 pixels from the top of the Page
   This means it will stick t the top of the page*/
     position: sticky;
@@ -30,7 +29,7 @@
   }
   
   /*This the declaration of the links in the navigation bar*/
-  liNav a {
+  liNav a, #loginButton {
     color: white;
     text-align: center;
     padding: 14px 16px;
@@ -41,10 +40,67 @@
     font-size: 20pt;
   }
 
+  /*
+  accLnk a{
+    width: 200px;
+    background-color: #afb3b3;
+    color: black;
+    border: 1px solid black;
+    z-index: 98;
+  }*/
+
+  accLnk a, #signOut{
+    color: white;
+    background-color: #afb3b3;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 150px;  
+    text-decoration: none;
+    display: inline-block;
+    width: 200px;
+    height: 150px;
+    border: 1px solid black;
+
+   /* padding: 14px 16px;
+    min-width: 200px;*/
+    font-size: 20pt;
+  }
+
+  #signOut{
+    height: 50px;
+    line-height: 50px;
+    width: 202px;
+  }
+
+  accLnk a:hover, #signOut:hover{
+    background-color: #969b9a;
+    cursor: pointer;
+  }
+
+  #loginButton{
+    background-color: black;
+    border: none;
+  }
+
   #right{
       float: right;
   }
   
+  #navBarWrapper{
+    position: relative;
+    
+  }
+
+  #loggedInDropdown{
+    width: 200px;
+    height: 200px;
+    background-color: green;
+    position: absolute;
+    right: 1px;
+    top: 70px;
+    display: none;
+  }
+
   /*This is used on a page that is open. The code is practically the same other than there is a thin read border on the bottom of the page to ensure that the user knows what page they are on */
   .active {
     border-bottom: 4px solid rgb(255, 0, 0);
@@ -54,3 +110,9 @@
   liNav a:hover {
     background-color: rgb(50, 50, 50);
   }
+
+  #loginButton:hover {
+    background-color: rgb(100, 100, 100);
+  }
+
+  

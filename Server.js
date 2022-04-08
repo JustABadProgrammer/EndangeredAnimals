@@ -34,6 +34,24 @@ app.get('/events', function (req, res) {
   res.render('pages/events.ejs');
 });
 
+app.get('/account', function (req, res) {
+  sessionInfo = {
+    Username: session.username,
+    Admin: session.admin,
+    EventsInterested: session.eventsInterested
+  }
+  res.render('pages/account.ejs', sessionInfo);
+});
+
+
+app.post('/signOut', function(req,res){
+  session.loggedin = false;
+  session.username = null;
+  session.admin = null
+  session.eventsInterested = null
+  res.send("Done :)")
+})
+
 //Get all the stats from the AnimalStats and send to client
 app.get("/getAnimalStats", function (req, res) {
   db.collection('AnimalStats').find(req.body).toArray(function (err, result) {
@@ -47,60 +65,79 @@ app.get("/getEvents", function (req, res) {
   db.collection('EventInfo').find(req.body).toArray(function (err, result) {
     if (err) throw err;
     res.send(JSON.stringify(result));
-    
+
   });
 });
 
-//Redirect to correct events page
-app.post('/getLoginInfo', function (req, res) {
-  res.send(getLoginInfo());
+app.post("/updateInterestedEvents", function (req, res) {
+  var query = { Username: req.body.Username };
+  var newvalues = {
+    $set: {
+            EventsInterested : req.body.EventsInterested
+          }
+  }
+
+  session.eventsInterested = req.body.EventsInterested;
+  db.collection('login').updateOne(query, newvalues, function (err, result) {
+    //db.collection('CurrentVenueInformation').insertOne(req.body, function(err, result) {
+    if (err) throw err;
+    res.send("Success");
+  });
+
 });
 
-//Format Login Info
-function getLoginInfo() {
-  sessionInfo = {
-    Username: session.username,
-    Admin: session.admin
-  }
-  return JSON.stringify(sessionInfo);
-}
+  //Redirect to correct events page
+  app.post('/getLoginInfo', function (req, res) {
+    res.send(getLoginInfo());
+  });
 
-//This is the method that checks whether the users information is correct
-app.post('/loginAuth', function (request, response) {
-  // Capture the input fields
-  let username = request.body.Username
-  let password = request.body.Password
-  // Ensure the input fields exists and are not empty
-  console.log(username + "-"+password)
-  if (username && password) {
+  //Format Login Info
+  function getLoginInfo() {
+    sessionInfo = {
+      Username: session.username,
+      Admin: session.admin,
+      EventsInterested: session.eventsInterested
+    }
+    return JSON.stringify(sessionInfo);
+  }
+
+  //This is the method that checks whether the users information is correct
+  app.post('/loginAuth', function (request, response) {
+    // Capture the input fields
+    let username = request.body.Username
+    let password = request.body.Password
+    // Ensure the input fields exists and are not empty
     console.log(username + "-" + password)
-    //Query the database for a person with the same username
-    db.collection('login').find({ "Username": username }).toArray(function (err, result) {
-      //db.collection.find({ "serialnumber" : { $exists : true, $ne : null } })
-      // If there is an issue with the query, output the error
-      if (err) throw err;
-      //Check if if the account exists
-      if (result.length == 1) {
-        //Check if its the correct password
-        console.log(result)
-        if (result[0]["Password"] == password) {
-          // Authenticate the user
-          session.loggedin = true;
-          session.username = username;
-          session.admin = result[0]["Admin"]
-          // Redirect to home page
-          response.send(getLoginInfo());
-          //console.log("LoggedIn")
+    if (username && password) {
+      console.log(username + "-" + password)
+      //Query the database for a person with the same username
+      db.collection('login').find({ "Username": username }).toArray(function (err, result) {
+        //db.collection.find({ "serialnumber" : { $exists : true, $ne : null } })
+        // If there is an issue with the query, output the error
+        if (err) throw err;
+        //Check if if the account exists
+        if (result.length == 1) {
+          //Check if its the correct password
+          console.log(result)
+          if (result[0]["Password"] == password) {
+            // Authenticate the user
+            session.loggedin = true;
+            session.username = username;
+            session.admin = result[0]["Admin"]
+            session.eventsInterested = result[0]["EventsInterested"]
+            // Redirect to home page
+            response.send(getLoginInfo());
+            //console.log("LoggedIn")
+          } else {
+            response.send('');
+          }
         } else {
           response.send('');
         }
-      } else {
-        response.send('');
-      }
+        response.end();
+      });
+    } else {
+      response.send('');
       response.end();
-    });
-  } else {
-    response.send('');
-    response.end();
-  }
-});
+    }
+  });

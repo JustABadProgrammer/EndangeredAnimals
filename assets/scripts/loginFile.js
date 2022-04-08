@@ -1,59 +1,130 @@
 userInfo = null;
 
 $(document).ready(function () {
-
-    getPage()
+    popupShowing = true;
 
     //Check to see if the user is logged in when the page loads
     $.ajax({
         url: "/getLoginInfo", // Url of backend (can be python, php, etc..)
-        type: "POST", // data type (can be get, post, put, delete)
+        type: "POST", // data type (can be get, post, put, delete),
+        async : false,
         success: function (response, textStatus, jqXHR) {
-            
+
             //If they are logged in then save their information
-            if(JSON.parse(response)["Username"] != null){
+            if (JSON.parse(response)["Username"] != null) {
                 userInfo = JSON.parse(response)
                 console.log(userInfo["Username"])
-                $("#loginButton").html(userInfo["Username"])
-            }else{
-                userInfo=null;
+                updatePage(getPage());
+                
+            } else {
+                userInfo = null;
             }
+            console.log(userInfo)
         }
     });
 
     //Submit button for the log in system
     //From 
-    $("#loginSubmitButton").click(function(){
+    $("#loginSubmitButton").click(function () {
         //Send request to server to see if the user exists/has correct password
-       loginAttempt(getPage());
+            loginAttempt(getPage());
     })
 
-    $("#loginButton").click(function(){
-        $('#blurTag').html('<link rel="stylesheet" href="stylesheets/blur.css"></link>');
-       // document.getElementById("backDiv").style.display = "block";
-        $('#backDiv').css('display', 'block');
+    $("#loginButton").click(function () {
+        if(userInfo==null){
+            $('#blurTag').html('<link rel="stylesheet" href="stylesheets/blur.css"></link>');
+            // document.getElementById("backDiv").style.display = "block";
+            $('#backDiv').css('display', 'block');
+        }else{
+            if($('#loggedInDropdown').is(':visible')){
+                $('#loggedInDropdown').hide();
+            }else{
+                $('#loggedInDropdown').show();
+            }
+            popupShowing=true;
+        }
+           
+
+            /*
+            console.log("else")
+            $.ajax({
+                url: "/account", // Url of backend (can be python, php, etc..)
+                type: "GET",
+                success: function (response, textStatus, jqXHR) {
+                    window.location.href = "finalPage.php";
+                }
+            });*/
     })
 
     //Close pop up window
-    $("#loginCloseButton").click(function(){
+    $("#loginCloseButton").click(function () {
         console.log("Closing")
         closeLoginPopup();
     });
 
-    function closeLoginPopup(){
+    //This double checks whether a user wants to sign out then proceeds with doing
+    //so if they wish
+    $('#signOut').click(function(){
+        let text = "Are you sure you want to log out?";
+        if (confirm(text)) {
+            console.log("SigningOut")
+            userInfo=null;
+            updateSignOut();
+            //Send to the server to remove information about the user
+            $.ajax({
+                url: "/signOut", // Url of backend (can be python, php, etc..)
+                type: "POST",
+                success: function (response, textStatus, jqXHR) {
+                    console.log(response)
+                    location.reload();
+                }
+            })
+        }
+    })
+
+    function closeLoginPopup() {
         $('#blurTag').html('');
         $('#backDiv').css('display', 'none');
     }
 
-    function getPage(){
-        console.log($(location). attr("href"));
-
-        if($(location). attr("href").includes("Game")){
+    //Returns an indexed number depending on which page we are on
+    function getPage() {
+        if ($(location).attr("href").includes("Game")) {
             return 1
-        }else if($(location). attr("href").includes("Events")){
+        } else if ($(location).attr("href").includes("Events")) {
             return 2
-        }else{
+        } else {
             return 0
+        }
+    }
+
+    //This updates the page for when a user is logged on
+    //Due to different content in each page the index is checked
+    //Then the corrisponding action is taken
+    function updatePage(pageID){
+        $("#loginButton").html(userInfo["Username"])
+        
+
+        if (pageID == 2) {
+            console.log("Events Page")
+            $('.loggedIn').css('display', 'block');
+            $('.eventDiv').css('height', '550px');
+
+            console.log(userInfo["EventsInterested"])
+            userInfo["EventsInterested"].forEach(function (e) {
+                $('#' + e + '_btn').text("Remove from interested list")
+                $('#' + e + '_btn').css('backgroundColor', '#4d4a52')
+                $('#' + e + '_btn').css('color', 'white')
+            })
+        }
+    }
+
+    function updateSignOut(pageID){
+        $("#loginButton").html("Login")
+
+        if (pageID == 2) {
+            $('.loggedIn').css('display', 'none');
+            $('.eventDiv').css('height', '550px');
         }
     }
 
@@ -61,12 +132,12 @@ $(document).ready(function () {
     //Home - 0
     //Game - 1
     //Events - 2    
-    function loginAttempt(pageID){
+    function loginAttempt(pageID) {
 
         console.log(pageID)
 
         dataIn = {
-            "Username":  $("#emailInp").val(),
+            "Username": $("#emailInp").val(),
             "Password": $("#passwordInp").val()
         }
 
@@ -78,27 +149,32 @@ $(document).ready(function () {
             success: function (response, textStatus, jqXHR) {
                 console.log(response)
                 //If there is a response then store the information and close the popup
-                if(response!=""){
-                    if(JSON.parse(response)["Username"] != null){
+                if (response != "") {
+                    if (JSON.parse(response)["Username"] != null) {
                         userInfo = JSON.parse(response)
                         console.log(userInfo["Username"])
                         document.getElementById("myForm").style.display = "none";
                         $('#blurTag').html('');
-                        $("#loginButton").html(userInfo["Username"])
                         document.getElementById("backDiv").style.display = "none";
                         $('#InvalidPassword').html("");
                     }
 
-                    if(pageID==2){
-                        console.log("Events Page")
-                        $('.loggedIn').css('display','block');
-                        $('.eventDiv').css('height','475px');
-                    }
-                }else{
+                    //If it is on the event page update that page
+                    updatePage(getPage());
+                } else {
                     $('#InvalidPassword').html("Incorrect Username/Password");
                 }
             }
         })
     }
+
+    /*
+    $(document).click(function () {
+        console.log("Elsewhere Click")
+        if (popupShowing) {
+            $('#loggedInDropdown').hide();
+            popupShowing=false;
+        }
+    });*/
 
 });
