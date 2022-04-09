@@ -39,7 +39,10 @@
     position: relative;
     overflow: auto;
     background-color: rgb(235, 235, 235);
+    max-width: 500px;
+    border-radius: 25px;
 }
+
 
 .posterImg {
     width: 95%;

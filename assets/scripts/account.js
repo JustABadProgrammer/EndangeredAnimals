@@ -1,19 +1,37 @@
 $(document).ready(function () {
 
     console.log(userInfo)
-    if(userInfo==null){
+    if (userInfo == null) {
         $('#Username').html('<h1>You need to log in to view this page</h1>')
         $('#interestedEventsWrapper').hide()
-    }else if(userInfo["Admin"]){
-        $('#Username').html('<h1>Hello ' + userInfo["Username"] +'! - Admin Page</h1>')
-    }else{
-        $('#Username').html('<h1>Hello ' + userInfo["Username"] +'! </h1>')
+    } else if (userInfo["Admin"]) {
+        $('#Username').html('<h1>Hello ' + userInfo["Username"] + '! - Admin</h1>')
+        setupEvents()
+        //setupAdmin()
+    } else {
+        $('#Username').html('<h1>Hello ' + userInfo["Username"] + '! </h1>')
         setupEvents()
     }
-    
+
     divCodeMap = []
     eventID = []
 
+    /*
+    function setupAdmin(){
+        $('#eventTitle').html("Interest in events:");
+
+        $.ajax({
+            url: "/getEvents", // Url of backend (can be python, php, etc..)
+            type: "GET", // data type (can be get, post, put, delete)
+            
+            success: function (response, textStatus, jqXHR) {
+                div = "";
+                JSON.parse(response).forEach(function (event) {
+                    divtext='<div class="adminInterest'
+                })
+            }
+        });
+    }*/
 
     function setupEvents() {
         //$('#loggedInDropdown').hide();
@@ -31,9 +49,13 @@ $(document).ready(function () {
                 console.log(eventsInfo)
                 var div = "";
                 i = 0;
+                //Loop for every event
+
                 eventsInfo.forEach(function (event) {
-                    console.log(event["EventID"])
-                    console.log(userInfo["EventsInterested"])
+                    //Id the user has proclaimed interest then genreate the code for it
+                    console.log("Event")
+                    console.log(event)
+                    console.log("Cleared")
                     if (userInfo["EventsInterested"].includes(event["EventID"])) {
                         divText = formatDivText(event, i);
                         div += divText;
@@ -42,14 +64,13 @@ $(document).ready(function () {
                         eventID.push(event["EventID"])
                         i++;
                     }
+
                 })
 
-                console.log(userInfo["EventsInterested"].length)
-                if(userInfo["EventsInterested"].length == 1 ){
-                    console.log("Yeet")
-                    div += '<div class="eventDiv"><h1> </h1></div>'
+                if(userInfo["EventsInterested"].length == 0){
+                    $('#eventTitle').html("You haven't showed any interest in any events :(</br>Head over to the events tab to view our many events")
                 }
-                
+
 
 
                 $('#interestedEvents').html(div);
@@ -61,6 +82,7 @@ $(document).ready(function () {
     function formatDivText(event, count) {
         var divText = '<div class="eventDiv" id=' + event["EventID"] + '>'
         divText += '<h1>' + event["EventName"] + '</h1>';
+        divText +=  '<h2 class="admin">People Interested - '+event["TotalInterested"]+'</h2>'
         divText += '<img src="images/Events/' + event["EventID"] + '.png" class="posterImg">'
         divText += '<h2>' + event["Description"] + '</h2>'
         divText += '<h2>' + event["Location1"] + '</br>' + event["Location2"] + '</h2>'
@@ -70,6 +92,6 @@ $(document).ready(function () {
     }
 
 
-    
+
 
 });

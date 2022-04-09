@@ -44,10 +44,10 @@ app.get('/account', function (req, res) {
 
 app.get('/editAccount', function (req, res) {
   datasend = {
-    name : session.username
+    name: session.username
   }
-  console.log(datasend )
-  res.render('pages/editAccount.ejs',datasend);
+  console.log(datasend)
+  res.render('pages/editAccount.ejs', datasend);
 });
 
 
@@ -103,29 +103,41 @@ app.post("/updateInterestedEvents", function (req, res) {
 
 app.post("/updateUserName", function (req, res) {
   session.username = req.body.NewUsername;
-  db.collection('login').updateOne({ Username: req.body.Username }, {$set: {Username: req.body.NewUsername} }, function (err, result) {
+  db.collection('login').updateOne({ Username: req.body.Username }, { $set: { Username: req.body.NewUsername } }, function (err, result) {
     if (err) throw err;
     res.send(":)");
   });
 
 });
 
-app.post("/userSignUp", function(req, res){
+app.post("/userSignUp", function (req, res) {
 
-  exists = false;
-  db.collection('login').find({ "Username": session.username }).toArray(function (err, result) {
-    exists = (result.length > 0)
+  db.collection('login').find({ "Username": req.body.Username }).toArray(function (err, result) {
+    if (err) throw err;
+    total = result.length;
+    console.log(total)
+
+    if (result.length == 0) {
+        dataIn = {
+          Username: req.body.Username,
+          Password: req.body.Password,
+          Admin : (req.body.Admin === "true"),
+          EventsInterested : []
+      }
+      db.collection('login').insertOne(dataIn, function (err, result) {
+        if (err) throw err;
+        session.loggedin = true;
+        session.username = req.body.Username;
+        session.admin = (req.body.Admin === "true")
+        session.eventsInterested = []
+        res.send(":)")
+      });
+    }else{
+      res.send(":(")
+    }
   });
 
-  console.log(exists)
-  if(exists==false){
-    db.collection('login').insertOne(req.body, function(err, result) {
-      if (err) throw err;
-      res.send(":)")
-    });
-  }else{
-    res.send(":(")
-  }
+  
 })
 
 app.post("/updateUserPassword", function (req, res) {
@@ -138,12 +150,12 @@ app.post("/updateUserPassword", function (req, res) {
 
     if (result[0]["Password"] == password) {
 
-      db.collection('login').updateOne({ Username: username }, {$set: {Password: newPassword} }, function (err, result) {
+      db.collection('login').updateOne({ Username: username }, { $set: { Password: newPassword } }, function (err, result) {
         if (err) throw err;
         res.send("Success");
       });
 
-    }else{
+    } else {
       res.send("Incorrect Password");
     }
 
@@ -153,11 +165,11 @@ app.post("/updateUserPassword", function (req, res) {
 
 });
 
-app.post("/deleteUser", function (req, res){
+app.post("/deleteUser", function (req, res) {
 
-  var user = { Username: req.body.Username, Password : req.body.Password };
+  var user = { Username: req.body.Username, Password: req.body.Password };
   console.log(user)
-  db.collection("login").deleteOne(user, function(err, obj) {
+  db.collection("login").deleteOne(user, function (err, obj) {
     if (err) throw err;
     console.log("Bye")
     res.send(signOut())
@@ -197,8 +209,7 @@ app.post('/loginAuth', function (request, response) {
       //Check if if the account exists
       if (result.length == 1) {
         //Check if its the correct password
-        console.log(result)
-        if (result[0]["Password"] == password) {
+        if (result[0]["Password"] === password) {
           // Authenticate the user
           session.loggedin = true;
           session.username = username;
@@ -223,7 +234,7 @@ app.post('/loginAuth', function (request, response) {
   }
 });
 
-function signOut(){
+function signOut() {
   session.loggedin = false;
   session.username = null;
   session.admin = null

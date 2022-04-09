@@ -14,10 +14,7 @@ $(document).ready(function () {
             //If they are logged in then save their information
             if (JSON.parse(response)["Username"] != null) {
                 userInfo = JSON.parse(response)
-                console.log(userInfo["EventsInterested"])
-                //location.reload();
-              //  updatePage(getPage());
-                
+                console.log(userInfo["EventsInterested"])                
             } else {
                 userInfo = null;
             }
@@ -91,11 +88,38 @@ $(document).ready(function () {
         $('#loginSubmitButton').hide();
         $('#title').text("Sign Up")
         $('#newAccount').hide();
-        $('#signUp').show();
+        $('#userSignUp').show();
     })
 
-    $('#signUp').click(function(){
-        
+    $('#userSignUp').click(function(){
+
+        username = $("#usernameInp").val();
+        password = $("#passwordInp").val();
+        admin = false;
+
+
+        dataIn = {
+            Username: $("#usernameInp").val(),
+            Password: $("#passwordInp").val(),
+            Admin : false,
+            EventsInterested : [null]
+        }
+
+        $.ajax({
+            url: "/userSignUp", // Url of backend (can be python, php, etc..)
+            type: "POST", // data type (can be get, post, put, delete)
+            data: dataIn,
+            //This runs if there was data returned
+            success: function (response, textStatus, jqXHR) {
+                console.log(response)
+                //If there is a response then store the information and close the popup
+                if (response===":)") {
+                    location.reload();
+                } else {
+                    $('#InvalidPassword').html("Username taken");
+                }
+            }
+        })        
     })
 
 

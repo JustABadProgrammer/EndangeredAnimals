@@ -20,6 +20,7 @@ body {
     background-color: white;
     z-index: 99;
     padding: 30px;
+    display: none;
 }
 
 /* Add styles to the form container */

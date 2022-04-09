@@ -28,12 +28,7 @@
     float: center;
   }
   
-  #loginButton{
-    background-color: black;
-    border-left: none;
-    border-right: none;
-    border-top: none;
-  }
+  
 
   /*This the declaration of the links in the navigation bar*/
   liNav a, #loginButton {
@@ -45,6 +40,14 @@
     width: 200px;
    /* min-width: 200px;*/
     font-size: 20pt;
+  }
+  
+  #loginButton{
+    background-color: black;
+    border: none;
+    font-size: 30px;
+    font-size: 1.2vw;
+    height: 100%;
   }
 
   /*
@@ -107,7 +110,7 @@
 
   /*This is used on a page that is open. The code is practically the same other than there is a thin read border on the bottom of the page to ensure that the user knows what page they are on */
   .active {
-    border-bottom: 4px solid rgb(255, 0, 0);
+    border-bottom: 4px solid rgb(255, 0, 0) !important;
   }
   
   /*WHen the mouse is hovering over the particular box in the navigation bar the colour of the box around the link will go grey*/

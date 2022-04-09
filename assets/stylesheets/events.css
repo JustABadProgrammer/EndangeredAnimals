@@ -6,11 +6,16 @@
 
 .eventDiv {
     height: 500px;
-    border: 1px solid black;
+    border: 3px solid black;
     padding-left: 2%;
     margin: 5%;
     position: relative;
     overflow: auto;
+    border-radius: 25px;
+}
+
+.admin{
+    display: none;
 }
 
 .loggedIn {
@@ -20,6 +25,7 @@
 .posterImg {
     width: 95%;
     max-height: 250px;
+    border-radius: 25px;
 }
 
 h1 {
@@ -36,6 +42,8 @@ h2 {
     background-color: #adaab2;
     color: black;
     border: 2px solid black;
+    height: 40px;
+    border-radius: 25px;
 }
 
 .imInterested:hover {

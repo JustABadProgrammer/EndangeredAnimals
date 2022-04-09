@@ -15,6 +15,7 @@ $(document).ready(function () {
             eventsInfo.forEach(function (event) {
                 var divText = '<div class="eventDiv" id=' + event["EventID"] + '>'
                 divText += '<h1>' + event["EventName"] + '</h1>';
+                divText +=  '<h2 class="admin">People Interested - '+event["TotalInterested"]+'</h2>'
                 divText += '<img src="images/Events/' + event["EventID"] + '.png" class="posterImg">'
                 divText += '<h2>' + event["Description"] + '</h2>'
                 divText += '<h2>' + event["Location1"] + '</br>' + event["Location2"] + '</h2>'
@@ -35,11 +36,17 @@ $(document).ready(function () {
                 $('.eventDiv').css('height','550px');
 
                 userInfo["EventsInterested"].forEach(function(e){
+                    if(e===""){}else{
                     console.log(e)
                     $('#'+e+'_btn').text("Remove from interested list")
                     $('#'+e+'_btn').css('backgroundColor', '#4d4a52')
                     $('#'+e+'_btn').css('color', 'white')
+                    }
                 })
+                if(userInfo["Admin"]==true){
+                    $('.eventDiv').css('height','600px');
+                    $('.admin').show();
+                }
             }
         }
     });
