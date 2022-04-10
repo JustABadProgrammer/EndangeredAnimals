@@ -1,0 +1,85 @@
+
+#pageContent{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+#panelDivs{
+    width: 1000px;
+    height: 500px;
+    border-radius: 20px;
+    border: 1px solid black;
+    background-color: green;
+    position: relative;
+    overflow: hidden;
+}
+
+
+.img{
+    width: 500px;
+    height : 500px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: absolute;
+
+}
+
+#img0{
+    left: 0px;
+}
+
+#img1{
+    left: 500px;
+}
+
+#img2{
+    left: 1000px;
+}
+
+.infoDiv {
+    display: block;
+    position: absolute;
+    text-align: center;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.infoText{
+    color: white;
+    font-size: 30pt;
+}
+
+#buttonDiv{
+    width: 50%;
+    margin: auto;
+}
+
+.button{
+    width: 49%;
+    height: 50px;
+    border-radius: 10pt;
+    background-color: rgb(125, 125, 125);
+    color: white;
+    font-size: 17pt;
+}
+
+.button:hover{
+    background-color: rgb(100, 100, 100);
+}
+
+.rating{
+    display: none;
+}
+
+#StartGameDiv{
+    width: 500px;
+    height: 400px;;
+}
+
+#startGame{
+    width: 100%;
+    height:100%;
+}

@@ -41,7 +41,8 @@ $(document).ready(function () {
             if($('#loggedInDropdown').is(':visible')){
                 $('#loggedInDropdown').hide();
             }else{
-                $('#loggedInDropdown').show();
+                //$('#loggedInDropdown').show();
+                $('#loggedInDropdown').slideDown(500);
             }
             popupShowing=true;
         }

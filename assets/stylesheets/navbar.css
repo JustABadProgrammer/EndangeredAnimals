@@ -80,10 +80,12 @@
     height: 50px;
     line-height: 50px;
     width: 202px;
+    border-top:none;
   }
 
   accLnk a:hover, #signOut:hover{
     background-color: #969b9a;
+    border-bottom: #969b9a;
     cursor: pointer;
   }
 

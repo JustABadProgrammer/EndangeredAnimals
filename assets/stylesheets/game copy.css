@@ -1,0 +1,82 @@
+.div{
+    width: 500px;
+    height: 600px;
+    border: 2px solid black;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+#pageContent{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);    
+}
+
+
+#panelDivs{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+#StartGameDiv{
+    width: 500px;
+    height: 400px;;
+}
+
+#startGame{
+    width: 100%;
+    height:100%;
+}
+
+
+.left{
+    border-bottom-left-radius: 25px;
+    border-top-left-radius: 25px;
+    
+}
+.right{
+    border-bottom-right-radius: 25px;
+    border-top-right-radius: 25px;
+}
+
+.div{
+    position: relative;
+}
+
+.infoDiv {
+    display: block;
+    position: absolute;
+    text-align: center;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.infoText{
+    color: white;
+    font-size: 20pt;
+}
+
+#buttonDiv{
+    width: 50%;
+    margin: auto;
+}
+
+
+.button{
+    width: 49%;
+    height: 50px;
+    border-radius: 10pt;
+    background-color: rgb(125, 125, 125);
+    color: white;
+    font-size: 17pt;
+}
+
+.button:hover{
+    background-color: rgb(100, 100, 100);
+}
+
+#lower{
+    float: right;
+}
