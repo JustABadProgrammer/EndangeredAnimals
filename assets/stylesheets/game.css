@@ -1,21 +1,25 @@
+#pageContent{
+    display: block;
+    align-items: center;
+    width : 1000px;
+    margin: auto;
+}
+
 
 #pageContent{
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    align-items: center;
 }
+
 
 #panelDivs{
     width: 1000px;
     height: 500px;
     border-radius: 20px;
-    border: 1px solid black;
-    background-color: green;
+    border: 3px solid black;
     position: relative;
     overflow: hidden;
+    margin: auto;
 }
-
 
 .img{
     width: 500px;
@@ -23,7 +27,7 @@
     background-repeat: no-repeat;
     background-size: cover;
     position: absolute;
-
+    z-index: 45;
 }
 
 #img0{
@@ -70,16 +74,112 @@
     background-color: rgb(100, 100, 100);
 }
 
+#newGame{
+    width: 100%;
+}
+
 .rating{
     display: none;
 }
 
 #StartGameDiv{
-    width: 500px;
-    height: 400px;;
+    width: 1000px;
+    height: 650px;
 }
 
 #startGame{
-    width: 100%;
-    height:100%;
+    width: 500px;
+    height: 400px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.circle{
+    height: 75px;
+    width: 75px;
+    background-color: white;
+    border: 2px solid black;
+    border-radius: 50%;
+    position: absolute;
+    z-index: 50;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;   
+}
+
+
+#conf{
+    display: none;
+    background-color: #138613;
+    z-index: 70;
+}
+
+.leaderboardRow{
+    border: 1px solid black;
+    border-top: none;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    padding: 0px 2px;
+    width: 600px;
+    margin: auto;
+}
+
+#titleRow{
+    border-top: 1px solid black;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    background-color: rgb(200, 200, 200);
+}
+
+#row4{
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#LoserClass{
+    z-index: 40;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: block;
+    text-align: center;
+}
+
+#youScored{
+    color:#b80c0c;
+}
+
+
+.personalInfoDiv{
+    position: absolute;
+    top: 5px;
+    z-index: 52;
+    color: white;
+    display: flex;
+}
+
+.imageSource{
+    position: absolute;
+    z-index: 52;
+    color: white;
+    display: flex;
+    bottom: 5px;
+    right: 5px;
+}
+
+.imageSource a{
+    color: white;
+    font-size: 12pt;
+    font-style: italic;
+}
+#PBDiv{
+    left: 5px;
+}
+
+#ScoreDiv{
+    right: 5px;
 }

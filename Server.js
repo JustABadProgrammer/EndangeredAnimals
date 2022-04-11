@@ -12,6 +12,7 @@ var db;
 //module.exports = app;
 
 
+
 MongoClient.connect(process.env.url, function (err, client) {
   if (err) throw err;
   db = client.db('UglyAnimals');
@@ -30,7 +31,23 @@ app.post('/', function (req, res) {
 
 //Redirect to correct game page
 app.get('/game', function (req, res) {
-  res.render('pages/game.ejs');
+  db.collection('Leaderboard').find().toArray(function (err, result) {
+    if (err) throw err;
+   // res.render('pages/game.ejs', {User : result["Leaderboard"][0], Score : result["Leaderboard"][1]});
+
+   resultJSON = JSON.parse(JSON.stringify(result))[0].Leaderboard
+
+   console.log(resultJSON);
+
+    users = resultJSON[0];
+    score = resultJSON[1];
+    
+    console.log("Users - " +users)
+    console.log(score)
+
+    res.render('pages/game.ejs', {User : users, Score : score, PB : session.personalBest});
+
+  });
 });
 
 //Redirect to correct events page
@@ -49,8 +66,6 @@ app.get('/editAccount', function (req, res) {
   console.log(datasend)
   res.render('pages/editAccount.ejs', datasend);
 });
-
-
 
 app.post('/signOut', function (req, res) {
   res.send(signOut());
@@ -101,6 +116,34 @@ app.post("/updateInterestedEvents", function (req, res) {
 
 });
 
+app.post("/updatePB", function (req, res) {
+
+  var query = { Username: session.username };
+
+  db.collection('EventInfo').updateOne(query, { $set: { PersonalBest: parseInt(req.body.personalBest) } }, function (err, result) {
+    if (err) throw err;
+    session.personalBest = parseInt(req.body.personalBest);
+    res.send("Success");
+  });
+
+});
+
+app.post("/updateLeaderboard", function (req, res) {
+  var query = { Username: req.body.Username };
+
+  var newvalues = {
+    $set: {
+      Leaderboard: req.body.boardUpdate
+    }
+  }
+  
+  db.collection('Leaderboard').updateOne(query, newvalues, function (err, result) {
+    if (err) throw err;
+    res.send("Success");
+  });
+
+});
+
 app.post("/updateUserName", function (req, res) {
   session.username = req.body.NewUsername;
   db.collection('login').updateOne({ Username: req.body.Username }, { $set: { Username: req.body.NewUsername } }, function (err, result) {
@@ -129,6 +172,7 @@ app.post("/userSignUp", function (req, res) {
         session.loggedin = true;
         session.username = req.body.Username;
         session.admin = (req.body.Admin === "true")
+        session.personalBest = req.body.PersonalBest
         session.eventsInterested = []
         res.send(":)")
       });
@@ -176,6 +220,7 @@ app.post("/deleteUser", function (req, res) {
   });
 })
 
+
 //Redirect to correct events page
 app.post('/getLoginInfo', function (req, res) {
   res.send(getLoginInfo());
@@ -186,7 +231,8 @@ function getLoginInfo() {
   sessionInfo = {
     Username: session.username,
     Admin: session.admin,
-    EventsInterested: session.eventsInterested
+    EventsInterested: session.eventsInterested,
+    PersonalBest : session.personalBest
   }
   console.log(sessionInfo)
   return JSON.stringify(sessionInfo);
@@ -215,7 +261,8 @@ app.post('/loginAuth', function (request, response) {
           session.username = username;
           session.admin = result[0]["Admin"]
           session.eventsInterested = result[0]["EventsInterested"]
-
+          session.personalBest = result[0]["PersonalBest"]
+          
           console.log("Signed In")
           // Redirect to home page
           response.send(":)");
@@ -239,6 +286,7 @@ function signOut() {
   session.username = null;
   session.admin = null
   session.eventsInterested = null
+  session.personalBest = null;
   console.log("Signed Out")
   return "Done :)"
 }
