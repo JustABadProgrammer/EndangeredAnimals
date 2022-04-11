@@ -16,29 +16,8 @@ $(document).ready(function () {
     divCodeMap = []
     eventID = []
 
-    /*
-    function setupAdmin(){
-        $('#eventTitle').html("Interest in events:");
-
-        $.ajax({
-            url: "/getEvents", // Url of backend (can be python, php, etc..)
-            type: "GET", // data type (can be get, post, put, delete)
-            
-            success: function (response, textStatus, jqXHR) {
-                div = "";
-                JSON.parse(response).forEach(function (event) {
-                    divtext='<div class="adminInterest'
-                })
-            }
-        });
-    }*/
-
     function setupEvents() {
-        //$('#loggedInDropdown').hide();
-        // var div = "Hello " + userInfo["Username"];
-
-        // $('#pageContent').html(div);
-
+        
         $.ajax({
             url: "/getEvents", // Url of backend (can be python, php, etc..)
             type: "GET", // data type (can be get, post, put, delete)

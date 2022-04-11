@@ -9,15 +9,17 @@
 <div id="navBarWrapper">
   <div id="navbar" class="navbar">
     <ul id="nav">
-      <liNav><a <%if(active=="Home" ){%>class="active"<%}%> href="/">Home</a></li>
-        <liNav><a <%if(active=="Game" ){%>class="active"<%}%> href="/Game">Game</a></li>
-          <liNav><a <%if(active=="Events" ){%>class="active"<%}%> href="/Events">Events</a></li>
+      <liNav><img id="navImg" src="images/UA.png"></liNav>
+      <liNav><a <%if(active=="Home" ){%>class="active"<%}%> href="/">Home</a></liNav>
+      <liNav><a <%if(active=="Game" ){%>class="active"<%}%> href="/Game">Game</a></liNav>
+      <liNav><a <%if(active=="Events" ){%>class="active"<%}%> href="/Events">Events</a></liNav>
 
-            <div id="right">
-              <!--<liNav><a <%if(active=="Login"){%>class="active"<%}%> href="loginPage" id="loginButton">Login</a></li>-->
-              <liNav><button <%if(active=="Account" ){%>class="active"<%}%> id="loginButton" type="button">Login</button></liNav>
+      <div id="right">
+        <!--<liNav><a <%if(active=="Login"){%>class="active"<%}%> href="loginPage" id="loginButton">Login</a></li>-->
+        <liNav><button <%if(active=="Account" ){%>class="active"<%}%> id="loginButton"
+              type="button">Login</button></liNav>
 
-            </div>
+      </div>
     </ul>
 
   </div>

@@ -3,12 +3,15 @@ $(document).ready(function(){
     $('#editUsername').click(function(){
         console.log($('#editUsername').text());
         console.log($('#editUsername').text() ==="Save")
+
+        //If the button doesnt say Save then unlock the ability to change username
         if($('#editUsername').text() ==="Save"==false){
             $("#usernameTxt").prop('disabled', false);
             $('#usernameCancel').show();
             $('#editUsername').text("Save")
         }else{
             
+            //This just checks whether it is actually a new username
             newUsername = $("#usernameTxt").val();
             console.log(newUsername);
             console.log(userInfo["Username"])
@@ -16,6 +19,7 @@ $(document).ready(function(){
                 cancelUsername();
             }else{
 
+                //Simple ajax call and reloading of page
                 dataTrans = {
                     Username : userInfo["Username"],
                     NewUsername : newUsername
@@ -36,6 +40,7 @@ $(document).ready(function(){
         }
     })
 
+    //Disable textboxes and reset buttons 
     function cancelUsername(){
         $("#usernameTxt").prop('disabled', true);
         $('#usernameCancel').hide();
@@ -55,6 +60,7 @@ $(document).ready(function(){
         $('#confNewPass').val("")
     }
 
+    //Cancel buttons
     $('#usernameCancel').click(function(){
         console.log("Click")
         cancelUsername();
@@ -64,6 +70,7 @@ $(document).ready(function(){
         cancelPassword();
     })
         
+    
     $('#editPassword').click(function(){
 
         console.log($('#editPassword').text())
@@ -73,8 +80,7 @@ $(document).ready(function(){
             newPass = $("#newPass").val();
             confPass = $('#confNewPass').val()
 
-            console.log(curPass + " / " + newPass + " / " + confPass);
-            
+            //This checks whether the passwords actually match and if they do sends the new password off to the server
             if(newPass===confPass){
                 console.log("Same Bois")
                 if(newPass===curPass){}else{
@@ -110,6 +116,7 @@ $(document).ready(function(){
             }
         
         }else{
+            //Reset thingies
             $("#currPass").prop('disabled', false);
             $("#newPass").prop('disabled', false);
             $("#confNewPass").prop('disabled', false);
@@ -119,6 +126,7 @@ $(document).ready(function(){
         }
     });
 
+    //Triggers a prompt where, if the user puts the correct password ajax calls the server to delete the user
     $("#deleteAccount").click(function(){
         let pass = prompt("Are you sure you want to delete your account?\nEnter your password to continue:", "");
         if (pass == null || pass == "") {
@@ -140,7 +148,7 @@ $(document).ready(function(){
                     div+= "<h2>Your account has now been deleted";
 
                     $("#pageContent").html(div)
-
+                    
                     console.log("Bye")
                 }}
             );

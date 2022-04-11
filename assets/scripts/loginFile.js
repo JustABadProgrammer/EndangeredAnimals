@@ -11,7 +11,6 @@ console.log(userInfo)
     }
     //Submit button for the log in system
     //From 
-
     $("#loginButton").click(function () {
         console.log(userInfo)
         if (userInfo == null) {
@@ -63,6 +62,9 @@ console.log(userInfo)
         $('#userSignUp').show();
     })
 
+
+    //Extract sign up information from the popup
+    //Send it to the server
     $('#userSignUp').click(function () {
 
         username = $("#usernameInp").val();
@@ -86,7 +88,7 @@ console.log(userInfo)
                 console.log(response)
                 //If there is a response then store the information and close the popup
                 if (response === ":)") {
-                    //location.reload();
+                    location.reload();
                 } else {
                     $('#InvalidPassword').html("Username taken");
                 }
@@ -100,19 +102,7 @@ console.log(userInfo)
         $('#backDiv').css('display', 'none');
     }
 
-    //Returns an indexed number depending on which page we are on
-    function getPage() {
-        if ($(location).attr("href").includes("Game")) {
-            return 1
-        } else if ($(location).attr("href").includes("Events")) {
-            return 2
-        } else if ($(location).attr("href").includes("account")) {
-            return 3
-        } else {
-            return 0
-        }
-    }
-
+    //Sends the popup information to the server
     $('#loginSubmitButton').click(function(){
         dataIn = {
             "Username": $("#usernameInp").val(),
@@ -125,13 +115,14 @@ console.log(userInfo)
             data: dataIn,
             //This runs if there was data returned
             success: function (response, textStatus, jqXHR) {
-                console.log(response)
                 //If there is a response then store the information and close the popup
-                if (response != "") {
-                    location.reload();
-                } else {
+                console.log(response)
+                if(response===':('){
                     $('#InvalidPassword').html("Incorrect Username/Password");
+                }else{
+                    location.reload()
                 }
+
             }
         })
     })

@@ -16,7 +16,6 @@
 #UploadPostButton{
 
     position: relative;
-    z-index: 50;
 
     margin: auto;
     width: 100px;
