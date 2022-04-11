@@ -3,11 +3,28 @@
 <html>
 
 <head>
-    <title>Info Page</title>
+    <title>My Account</title>
+    <script>
+        var session = '<%- session %>'
+        var parsedSession = JSON.parse(session);
+        if (parsedSession.loggedin != null && parsedSession.loggedin == true) {
+            userInfo = {
+                LoggedIn: parsedSession.loggedin,
+                Username: parsedSession.username,
+                Admin: parsedSession.admin,
+                EventsInterested: parsedSession.eventsInterested,
+                PersonalBest: parsedSession.personalBest
+            }
+        } else {
+            userInfo = null;
+        }
+    </script>
     <%- include('../partials/head', {active: "Account" }) %>
-    <%- include('../partials/login') %>
-        <script src="scripts\account.js"></script>
-        <link rel="stylesheet" href="stylesheets\account.css">
+        <%- include('../partials/login') %>
+
+            <script src="scripts\account.js"></script>
+            <link rel="stylesheet" href="stylesheets\account.css">
+
 </head>
 
 <body>
@@ -21,9 +38,9 @@
             <div id="interestedEvents"></div>
         </div>
         <div id="editPage"></div>
-            </br>
-            <editButton><a href="/editAccount">Edit Account</a></editButton>
-        </div>
+        </br>
+        <editButton><a href="/editAccount">Edit Account</a></editButton>
+    </div>
     </div>
 </body>
 

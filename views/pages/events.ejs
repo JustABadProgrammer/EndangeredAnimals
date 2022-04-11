@@ -1,25 +1,43 @@
 <!DOCTYPE html>
 
 <html>
-    <head>
-        <title>Info Page</title>
-        <link rel="stylesheet" href="stylesheets\events.css">
-        <%- include('../partials/head', {active: "Events"}) %>
+
+<head>
+    <title>Our Events</title>
+    <script>
+        var session = '<%- session %>'
+        var parsedSession = JSON.parse(session);
+        if (parsedSession.loggedin != null && parsedSession.loggedin == true) {
+            userInfo = {
+                LoggedIn: parsedSession.loggedin,
+                Username: parsedSession.username,
+                Admin: parsedSession.admin,
+                EventsInterested: parsedSession.eventsInterested,
+                PersonalBest: parsedSession.personalBest
+            }
+        } else {
+            userInfo = null;
+        }
+    </script>
+    <link rel="stylesheet" href="stylesheets\events.css">
+    <%- include('../partials/head', {active: "Events" }) %>
         <%- include('../partials/login') %>
-        <script src="scripts\events.js"></script>
-    </head>
-    <body>
+            <script src="scripts\events.js"></script>
+</head>
 
-        <div id="EventContent">
-            <h1>Events</h1>
-            <h2>Us at UglyAnimalsLtd like to host different events where people can come and meet
-                some of the animals that show beauty is in the eye of the beholder. These are the events
-                that we would love if you would considder coming along to :)
-            </h2>
-            <div id="pageContent">
+<body>
 
-            </div>
+    <div id="EventContent">
+        <h1>Our Events</h1>
+        <h2>Us at UglyAnimalsLtd like to host different events where people can come and meet
+            some of the animals that show beauty is in the eye of the beholder. These are the events
+            that we would love if you would considder coming along to :)
+        </h2>
+        <div id="pageContent">
+
         </div>
-        
-    </body>
+    </div>
+
+</body>
+
 </html>

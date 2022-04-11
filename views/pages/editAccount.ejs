@@ -3,8 +3,23 @@
 <html>
 
 <head>
-    <title>Info Page</title>
+    <title>Edit Account</title>
     <link rel="stylesheet" href="stylesheets\editAccount.css">
+    <script>
+        var session = '<%- session %>'
+            var parsedSession = JSON.parse(session);
+            if(parsedSession.loggedin != null && parsedSession.loggedin == true){
+                userInfo = {
+                    LoggedIn : parsedSession.loggedin,
+                    Username: parsedSession.username,
+                    Admin: parsedSession.admin,
+                    EventsInterested: parsedSession.eventsInterested,
+                    PersonalBest: parsedSession.personalBest
+                }
+            }else{
+                userInfo=null;
+            }
+    </script>
     <%- include('../partials/head', {active: "Account" }) %>
         <%- include('../partials/login') %>
             <script src="scripts\editAccount.js"></script>
@@ -30,7 +45,7 @@
             </div></br></br>
             <div id="passwordChangeDiv">
                 <label for="curPass"><b>Current Password:</label>
-                <input class="txt" type="password" id="currPass" name="curPass" placeholder="*****" disabled></br>
+                <input class="txt" type="password" id="currPass" name="curPass" placeholder="******************************" disabled></br>
 
                 <label for="CurrentPassword"><b>New Password:</label>
                 <input class="txt" type="password" id="newPass" name="newPass" placeholder="" disabled></br>

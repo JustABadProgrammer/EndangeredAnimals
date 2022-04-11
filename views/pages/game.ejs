@@ -3,16 +3,27 @@
 <html>
 
 <head>
-    <title>Info Page</title>
+    <title>Higher/Lower</title>
+    <script>
+        var passedScore = '<%- Score %>'
+        var passedUser = '<%- User %>'
+        var session = '<%- session %>'
+        var parsedSession = JSON.parse(session);
+        if (parsedSession.loggedin != null && parsedSession.loggedin == true) {
+            userInfo = {
+                LoggedIn: parsedSession.loggedin,
+                Username: parsedSession.username,
+                Admin: parsedSession.admin,
+                EventsInterested: parsedSession.eventsInterested,
+                PersonalBest: parsedSession.personalBest
+            }
+        } else {
+            userInfo = null;
+        }
+    </script>
     <%- include('../partials/head', {active: "Game" }) %>
         <%- include('../partials/login') %>
-            <script>
-        // stringify the data passed from router to ejs (within the EJS template only)
-                
-                var passedScore = '<%- Score %>'
-                var passedUser = '<%- User %>'
-                
-            </script>
+
 
             <script src="scripts\game.js"></script>
             <link rel="stylesheet" href="stylesheets\game.css">
@@ -32,91 +43,96 @@
             <div id="panelDivs">
 
                 <div class="circle" id="conf"></div>
-                <div class="circle" id="vs"><h1>VS</h1></div>
+                <div class="circle" id="vs">
+                    <h1>VS</h1>
+                </div>
 
                 <% if(PB!=null){%>
-                <div class="personalInfoDiv" id="PBDiv">
-                    <h2>Personal Best:</h2>
-                    <h2 id="PB"><%=PB%></h2>
-                </div>
-                <%}%>
+                    <div class="personalInfoDiv" id="PBDiv">
+                        <h2>Personal Best:</h2>
+                        <h2 id="PB">
+                            <%=PB%>
+                        </h2>
+                    </div>
+                    <%}%>
 
-                <div class="personalInfoDiv" id="ScoreDiv">
-                    <h2>Score:</h2>
-                    <h2 id="CS">0</h2>
-                </div>
+                        <div class="personalInfoDiv" id="ScoreDiv">
+                            <h2>Score:</h2>
+                            <h2 id="CS">0</h2>
+                        </div>
 
-                <div id="LoserClass">
-                    <h1>Unlucky!</h1>
-                    <h2>You scored:</h2>
-                    <h1 id="youScored"></h1>
-                    <button type="button" class="button  startButton" id="newGame"><span>New Game</span></button>
-                </div>
+                        <div id="LoserClass">
+                            <h1>Unlucky!</h1>
+                            <h2>You scored:</h2>
+                            <h1 id="youScored"></h1>
+                            <button type="button" class="button  startButton" id="newGame"><span>New
+                                    Game</span></button>
+                        </div>
 
-                <div id="img0" class="img">
+                        <div id="img0" class="img">
+                            <div class=" infoDiv">
+                                <h1 id="name0" class="infoText"></h1>
+                                <h1 id="number0" class="infoText rating"></h1>
+                            </div>
+                            <div class="imageSource">
+                                <a href="" id="source0"></a>
+                            </div>
+                        </div>
+
+                        <div id="img1" class="img"">
                     <div class=" infoDiv">
-                        <h1 id="name0" class="infoText"></h1>
-                        <h1 id="number0" class="infoText rating"></h1>
-                    </div>
-                    <div class="imageSource">
-                        <a href="" id="source0"></a>
-                    </div>
-                </div>
-
-                <div id="img1" class="img"">
-                    <div class=" infoDiv">
-                        <h1 id="name1" class="infoText"></h1>
-                        <h1 id="number1" class="infoText rating"></h1>
-                    </div>
-                    <div class="imageSource">
-                        <a href="" id="source1"></a>
-                    </div>
-                </div>
-
-                <div id="img2" class="img"">
-                    <div class=" infoDiv">
-                        <h1 id="name2" class="infoText"></h1>
-                        <h1 id="number2" class="infoText rating"></h1>
-                    </div>
-                    <div class="imageSource">
-                        <a href="" id="source2"></a>
-                    </div>
-                </div>
+                            <h1 id="name1" class="infoText"></h1>
+                            <h1 id="number1" class="infoText rating"></h1>
+                        </div>
+                        <div class="imageSource">
+                            <a href="" id="source1"></a>
+                        </div>
             </div>
-            </br>
-            <div id="buttonDiv">
-                <button type="button" class="button" id="higher"><span><img style="height:25px; padding-right: 10px;"
-                            src="images/up.png">Higher</span></button>
-                <button type="button" class="button" id="lower"><span>Lower<img style="height:25px; padding-left: 10px;"
-                            src="images/down.png"></span></button>
+
+            <div id="img2" class="img"">
+                    <div class=" infoDiv">
+                <h1 id="name2" class="infoText"></h1>
+                <h1 id="number2" class="infoText rating"></h1>
+            </div>
+            <div class="imageSource">
+                <a href="" id="source2"></a>
             </div>
         </div>
+    </div>
+    </br>
+    <div id="buttonDiv">
+        <button type="button" class="button" id="higher"><span><img style="height:25px; padding-right: 10px;"
+                    src="images/up.png">Higher</span></button>
+        <button type="button" class="button" id="lower"><span>Lower<img style="height:25px; padding-left: 10px;"
+                    src="images/down.png"></span></button>
+    </div>
+    </div>
 
     </br>
     <div id="Leaderboard">
 
         <div class="leaderboardRow" id="titleRow">
             <h2>Rank</h1>
-            <h2> Username</h1>
-            <h2>Score</h1>
+                <h2> Username</h1>
+                    <h2>Score</h1>
         </div>
 
         <% for(i=0; i < 5; i++){ %>
-            <% row="row"+i; %>
-            <% userRow="UserRow"+i; %>
-            <% scoreRow="ScoreRow"+i; %>
-            <div class="leaderboardRow" id=<%= row %>>
-                <h3>
-                    <%=i+1%>
-                </h3>
-                <h3 id=<%=userRow%>>
-                    <%= User[i] %>
-                </h3>
-                <h3 id=<%=scoreRow%>>
-                    <%= Score[i] %>
-                </h3>
-            </div>
-            <% } %>
+            <% row="row" +i; %>
+                <% userRow="UserRow" +i; %>
+                    <% scoreRow="ScoreRow" +i; %>
+                        <div class="leaderboardRow" id=<%=row %>>
+                            <h3>
+                                <%=i+1%>
+                            </h3>
+                            <h3 id=<%=userRow%>>
+                                <%= User[i] %>
+                            </h3>
+                            <h3 id=<%=scoreRow%>>
+                                <%= Score[i] %>
+                            </h3>
+                        </div>
+                        <% } %>
 
     </div>
 

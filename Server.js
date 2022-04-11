@@ -5,13 +5,38 @@ const bodyParser = require('body-parser')
 const app = express();
 require('dotenv').config()
 const session = require('express-session');
+const crypto = require ("crypto");
+
 app.use(express.static('assets'))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.set('view engine', 'ejs');
+
+app.use(session({
+	secret: 'replace me',
+	resave: true,
+	saveUninitialized: true
+}));
+
+
 var db;
+const multer = require('multer');
+
+//const upload = multer({dest:'assets/images/Posts'});
 //module.exports = app;
+var path = require('path');
+const { title } = require('process');
 
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'assets/images/Posts/')
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)) //Appending extension
+  }
 
+})
+
+const upload = multer({ storage: storage });
 
 MongoClient.connect(process.env.url, function (err, client) {
   if (err) throw err;
@@ -22,53 +47,49 @@ MongoClient.connect(process.env.url, function (err, client) {
 
 //Redirect to correct index page
 app.get('/', function (req, res) {
-  res.render('pages/index.ejs');
-});
-
-app.post('/', function (req, res) {
-  res.render('pages/index.ejs');
+  db.collection('MainPagePosts').find(req.body).toArray(function (err, result) {
+    if (err) throw err;
+    //res.send(JSON.stringify(result));
+    res.render('pages/index.ejs', { content: result, admin: req.session.admin, session : JSON.stringify(req.session)});
+  });
 });
 
 //Redirect to correct game page
 app.get('/game', function (req, res) {
   db.collection('Leaderboard').find().toArray(function (err, result) {
     if (err) throw err;
-   // res.render('pages/game.ejs', {User : result["Leaderboard"][0], Score : result["Leaderboard"][1]});
+    // res.render('pages/game.ejs', {User : result["Leaderboard"][0], Score : result["Leaderboard"][1]});
 
-   resultJSON = JSON.parse(JSON.stringify(result))[0].Leaderboard
-
-   console.log(resultJSON);
+    resultJSON = JSON.parse(JSON.stringify(result))[0].Leaderboard
 
     users = resultJSON[0];
     score = resultJSON[1];
-    
-    console.log("Users - " +users)
-    console.log(score)
 
-    res.render('pages/game.ejs', {User : users, Score : score, PB : session.personalBest});
+    res.render('pages/game.ejs', { User: users, Score: score, PB: req.session.personalBest, session : JSON.stringify(req.session)});
 
   });
 });
 
 //Redirect to correct events page
 app.get('/events', function (req, res) {
-  res.render('pages/events.ejs');
+  res.render('pages/events.ejs', {session : JSON.stringify(req.session)});
 });
 
 app.get('/account', function (req, res) {
-  res.render('pages/account.ejs');
+  res.render('pages/account.ejs', {session : JSON.stringify(req.session)});
 });
 
 app.get('/editAccount', function (req, res) {
   datasend = {
-    name: session.username
+    name: req.session.username,
+    session : JSON.stringify(req.session)
   }
-  console.log(datasend)
+
   res.render('pages/editAccount.ejs', datasend);
 });
 
 app.post('/signOut', function (req, res) {
-  res.send(signOut());
+  res.send(signOut(req));
 })
 
 //Get all the stats from the AnimalStats and send to client
@@ -91,8 +112,7 @@ app.get("/getEvents", function (req, res) {
 app.post("/incrementEvent", function (req, res) {
 
   var query = { EventID: req.body.EventID };
-  console.log(query)
-  console.log(parseInt(req.body.number))
+  
   db.collection('EventInfo').updateOne(query, { $inc: { TotalInterested: parseInt(req.body.number) } }, function (err, result) {
     if (err) throw err;
     res.send("Success");
@@ -108,7 +128,7 @@ app.post("/updateInterestedEvents", function (req, res) {
     }
   }
 
-  session.eventsInterested = req.body.EventsInterested;
+  req.session.eventsInterested = req.body.EventsInterested;
   db.collection('login').updateOne(query, newvalues, function (err, result) {
     if (err) throw err;
     res.send("Success");
@@ -118,11 +138,11 @@ app.post("/updateInterestedEvents", function (req, res) {
 
 app.post("/updatePB", function (req, res) {
 
-  var query = { Username: session.username };
+  var query = { Username: req.session.username };
 
   db.collection('EventInfo').updateOne(query, { $set: { PersonalBest: parseInt(req.body.personalBest) } }, function (err, result) {
     if (err) throw err;
-    session.personalBest = parseInt(req.body.personalBest);
+    req.session.personalBest = parseInt(req.body.personalBest);
     res.send("Success");
   });
 
@@ -136,7 +156,7 @@ app.post("/updateLeaderboard", function (req, res) {
       Leaderboard: req.body.boardUpdate
     }
   }
-  
+
   db.collection('Leaderboard').updateOne(query, newvalues, function (err, result) {
     if (err) throw err;
     res.send("Success");
@@ -145,7 +165,7 @@ app.post("/updateLeaderboard", function (req, res) {
 });
 
 app.post("/updateUserName", function (req, res) {
-  session.username = req.body.NewUsername;
+  req.session.username = req.body.NewUsername;
   db.collection('login').updateOne({ Username: req.body.Username }, { $set: { Username: req.body.NewUsername } }, function (err, result) {
     if (err) throw err;
     res.send(":)");
@@ -158,30 +178,29 @@ app.post("/userSignUp", function (req, res) {
   db.collection('login').find({ "Username": req.body.Username }).toArray(function (err, result) {
     if (err) throw err;
     total = result.length;
-    console.log(total)
 
     if (result.length == 0) {
-        dataIn = {
-          Username: req.body.Username,
-          Password: req.body.Password,
-          Admin : (req.body.Admin === "true"),
-          EventsInterested : []
+      dataIn = {
+        Username: req.body.Username,
+        Password: req.body.Password,
+        Admin: (req.body.Admin === "true"),
+        EventsInterested: []
       }
       db.collection('login').insertOne(dataIn, function (err, result) {
         if (err) throw err;
-        session.loggedin = true;
-        session.username = req.body.Username;
-        session.admin = (req.body.Admin === "true")
-        session.personalBest = req.body.PersonalBest
-        session.eventsInterested = []
+        req.session.loggedin = true;
+        req.session.username = req.body.Username;
+        req.session.admin = (req.body.Admin === "true")
+        req.session.personalBest = req.body.PersonalBest
+        req.session.eventsInterested = []
         res.send(":)")
       });
-    }else{
+    } else {
       res.send(":(")
     }
   });
 
-  
+
 })
 
 app.post("/updateUserPassword", function (req, res) {
@@ -190,7 +209,7 @@ app.post("/updateUserPassword", function (req, res) {
   let password = req.body.Password
   let newPassword = req.body.NewPassword
 
-  db.collection('login').find({ "Username": session.username }).toArray(function (err, result) {
+  db.collection('login').find({ "Username": req.session.username }).toArray(function (err, result) {
 
     if (result[0]["Password"] == password) {
 
@@ -212,41 +231,45 @@ app.post("/updateUserPassword", function (req, res) {
 app.post("/deleteUser", function (req, res) {
 
   var user = { Username: req.body.Username, Password: req.body.Password };
-  console.log(user)
   db.collection("login").deleteOne(user, function (err, obj) {
     if (err) throw err;
-    console.log("Bye")
-    res.send(signOut())
+    res.send(signOut(req))
   });
 })
 
+app.post('/uploadPost', upload.single('photo'), (req, res) => {
+  postTitle = req.body.Title;
+  postBody = req.body.Body;
+  img = "";
 
-//Redirect to correct events page
-app.post('/getLoginInfo', function (req, res) {
-  res.send(getLoginInfo());
-});
-
-//Format Login Info
-function getLoginInfo() {
-  sessionInfo = {
-    Username: session.username,
-    Admin: session.admin,
-    EventsInterested: session.eventsInterested,
-    PersonalBest : session.personalBest
+  if (req.file) {
+    img = req.file["filename"];
   }
-  console.log(sessionInfo)
-  return JSON.stringify(sessionInfo);
-}
+
+  dataIn = {
+    Title : postTitle,
+    Content : postBody,
+    Img : img
+  }
+
+  db.collection('MainPagePosts').insertOne(dataIn, function (err, result) {
+    if(err) throw err;
+    res.redirect("/")
+  })
+
+});
 
 //This is the method that checks whether the users information is correct
 app.post('/loginAuth', function (request, response) {
   // Capture the input fields
+  //let username = request.body.username
+  //let password = request.body.psw
+
   let username = request.body.Username
   let password = request.body.Password
+
   // Ensure the input fields exists and are not empty
-  console.log(username + "-" + password)
   if (username && password) {
-    console.log(username + "-" + password)
     //Query the database for a person with the same username
     db.collection('login').find({ "Username": username }).toArray(function (err, result) {
       //db.collection.find({ "serialnumber" : { $exists : true, $ne : null } })
@@ -257,21 +280,20 @@ app.post('/loginAuth', function (request, response) {
         //Check if its the correct password
         if (result[0]["Password"] === password) {
           // Authenticate the user
-          session.loggedin = true;
-          session.username = username;
-          session.admin = result[0]["Admin"]
-          session.eventsInterested = result[0]["EventsInterested"]
-          session.personalBest = result[0]["PersonalBest"]
-          
           console.log("Signed In")
-          // Redirect to home page
-          response.send(":)");
-          //console.log("LoggedIn")
+          
+          request.session.loggedin = true;
+          request.session.username = username;
+          request.session.admin = result[0]["Admin"]
+          request.session.eventsInterested = result[0]["EventsInterested"]
+          request.session.personalBest = result[0]["PersonalBest"]
+          //response.send(":)")
+          response.redirect('/');
         } else {
-          response.send('');
+          response.send('IncorrectPassword');
         }
       } else {
-        response.send('');
+        response.end('');
       }
       response.end();
     });
@@ -281,12 +303,37 @@ app.post('/loginAuth', function (request, response) {
   }
 });
 
-function signOut() {
-  session.loggedin = false;
-  session.username = null;
-  session.admin = null
-  session.eventsInterested = null
-  session.personalBest = null;
+encPass()
+function encPass(pass){
+
+  // crypto module
+  const crypto = require("crypto");
+  const algorithm = "aes-256-cbc"; 
+
+  // generate 16 bytes of random data
+  const initVector = crypto.randomBytes(16);
+  // secret key generate 32 bytes of random data
+  Securitykey = process.env.key
+    // the cipher function
+  const cipher = crypto.createCipheriv(algorithm, Securitykey, initVector);
+
+  // encrypt the message
+  // input encoding
+  // output encoding
+  let encryptedData = cipher.update(message, "utf-8", "hex");
+  encryptedData += cipher.final("hex");
+  console.log("Encrypted message: " + encryptedData);
+
+}
+
+function signOut(request) {
+  if(request.session.loggedin==true){
+    request.session.loggedin = false;
+    delete request.session.username;
+    delete request.session.admin;
+    delete request.session.eventsInterested;
+    delete request.session.personalBest;
+  }
   console.log("Signed Out")
   return "Done :)"
 }

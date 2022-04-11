@@ -7,7 +7,7 @@ body {
     margin-left: auto;
     margin-right: auto;
     /*Set the background colour to be grey */
-    background-color: rgb(235, 235, 235);
+    background-color: #ebebeb;
 }
 
 
@@ -37,7 +37,6 @@ body {
   width: 94%;
   padding: 15px;
   margin: 5px 0 22px 0;
-  border: none;
   background: #f1f1f1;
   border: 1px solid black;
 }

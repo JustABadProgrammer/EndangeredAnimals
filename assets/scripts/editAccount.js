@@ -48,6 +48,11 @@ $(document).ready(function(){
         $("#confNewPass").prop('disabled', true);
         $('#passwordCancel').hide();
         $('#editPassword').text("Edit Password")
+
+        
+        $("#currPass").val("");
+        $("#newPass").val("");
+        $('#confNewPass').val("")
     }
 
     $('#usernameCancel').click(function(){
@@ -62,10 +67,8 @@ $(document).ready(function(){
     $('#editPassword').click(function(){
 
         console.log($('#editPassword').text())
-        if($('#editPassword').text() ==="Save"==false){
+        if($('#editPassword').text() ==="Save"){
 
-        }else{
-            
             curPass = $("#currPass").val();
             newPass = $("#newPass").val();
             confPass = $('#confNewPass').val()
@@ -93,7 +96,9 @@ $(document).ready(function(){
                             if(response.includes("Incorrect")){
                                 $('#incLabel').html("Incorrect Password")                                
                             }else{
-                                location.reload();
+                                $('#incLabel').html("Password Changed Successfully")      
+                                $("#incLabel").show().delay( 5000 ).hide(0);
+                                cancelPassword();
                             }
                         }
                     })
@@ -103,7 +108,14 @@ $(document).ready(function(){
             }else{
                 $('#incLabel').html("Passwords do not match")
             }
+        
+        }else{
+            $("#currPass").prop('disabled', false);
+            $("#newPass").prop('disabled', false);
+            $("#confNewPass").prop('disabled', false);
 
+            $('#passwordCancel').show();
+            $('#editPassword').text("Save")
         }
     });
 
