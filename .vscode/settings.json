@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/9bda4d80-8f52-426a-a306-52f0846d330b/resourceGroups/appsvc_linux_centralus/providers/Microsoft.Web/sites/UglyAnimals-CM4025",
+    "appService.deploySubpath": "."
+}
