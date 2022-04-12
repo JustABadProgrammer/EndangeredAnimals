@@ -374,6 +374,7 @@ function decPass(enc) {
   return decryptedData
 }
 
+
 function signOut(request) {
   if (request.session.loggedin == true) {
     request.session.loggedin = false;
